@@ -37,7 +37,7 @@ export default function RootLayout({
           <Theme>
             <AppContextProvider>
               <Navbar />
-              <main className="px-4 pt-6">{children}</main>
+              <main>{children}</main>
             </AppContextProvider>
           </Theme>
         </ThemeProvider>

@@ -21,7 +21,7 @@ const Navbar = () => {
 
     return (
         <div>
-            <header className="flex justify-between items-center px-6 py-4 border-b-2">
+            <header className="flex justify-between items-center px-6 py-4 border-b-2 w-full">
                 <Heading as="h1">Certify</Heading>
                 <div className='lg:hidden flex space-x-4'>
                     {/* Hamburger Button */}
