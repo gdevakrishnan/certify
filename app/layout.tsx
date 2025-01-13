@@ -1,10 +1,11 @@
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import { Theme } from "@radix-ui/themes";
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "./components/Navbar";
 import AppContextProvider from "./context/AppContextProvider";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,15 +32,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Theme accentColor="purple" radius="small" appearance="light">
-          <AppContextProvider>
-            <Navbar />
-            <main className="px-4 pt-6">
-              {children}
-            </main>
-          </AppContextProvider>
-        </Theme>
+        {/* Wrap the entire layout in the ThemeProvider */}
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Theme>
+            <AppContextProvider>
+              <Navbar />
+              <main className="px-4 pt-6">{children}</main>
+            </AppContextProvider>
+          </Theme>
+        </ThemeProvider>
       </body>
-    </html >
+    </html>
   );
 }

@@ -1,10 +1,12 @@
 'use client'
 import { Heading } from '@radix-ui/themes'
+import { useTheme } from 'next-themes';
 import Link from 'next/link'
 import React, { useState } from 'react'
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { theme, setTheme } = useTheme();
 
     const links = [
         { href: '/', label: 'Home' },
@@ -49,6 +51,23 @@ const Navbar = () => {
                                 </Link>
                             </li>
                         ))}
+                        {
+                            theme === 'light' ? (
+                                <button
+                                    className="focus:outline-none"
+                                    onClick={() => setTheme('dark')}
+                                >
+                                    Dark
+                                </button>
+                            ) : (
+                                <button
+                                    className="focus:outline-none"
+                                    onClick={() => setTheme('light')}
+                                >
+                                    Light
+                                </button>
+                            )
+                        }
                     </ul>
                 </nav>
             </header>
