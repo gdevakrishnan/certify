@@ -47,36 +47,37 @@ const CollegeRequests = () => {
 
   return (
     <Fragment>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="p-6 max-w-md mx-auto my-8 rounded shadow-lg flex flex-col border-2"
-      >
-        <h2 className="text-xl font-semibold mb-4 text-center">College Requests</h2>
-        {fields.map((field) => (
-          <div key={field.id} className="mb-4 grid">
-            <label htmlFor={field.id} className="mb-2 text-sm font-medium">
-              {field.label}
-            </label>
-            <input
-              id={field.id}
-              {...register(field.id as keyof FormData)}
-              className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 ${
-                errors[field.id as keyof FormData] ? "border-red-500" : "focus:ring-blue-500"
-              }`}
-              type={field.type}
-              placeholder={field.placeholder}
-            />
-            {errors[field.id as keyof FormData] && (
-              <p className="mt-1 text-xs text-red-500">
-                {errors[field.id as keyof FormData]?.message}
-              </p>
-            )}
-          </div>
-        ))}
-        <Button type="submit" className="w-full px-4 py-2 bg-accent rounded hover:bg-accent-600">
-          Get Access
-        </Button>
-      </form>
+      <section className="min-h-screen w-full">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="p-6 max-w-md mx-auto my-8 rounded shadow-lg flex flex-col border-2"
+        >
+          <h2 className="text-xl font-semibold mb-4 text-center">College Requests</h2>
+          {fields.map((field) => (
+            <div key={field.id} className="mb-4 grid">
+              <label htmlFor={field.id} className="mb-2 text-sm font-medium">
+                {field.label}
+              </label>
+              <input
+                id={field.id}
+                {...register(field.id as keyof FormData)}
+                className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors[field.id as keyof FormData] ? "border-red-500" : "focus:ring-blue-500"
+                  }`}
+                type={field.type}
+                placeholder={field.placeholder}
+              />
+              {errors[field.id as keyof FormData] && (
+                <p className="mt-1 text-xs text-red-500">
+                  {errors[field.id as keyof FormData]?.message}
+                </p>
+              )}
+            </div>
+          ))}
+          <Button type="submit" className="w-full px-4 py-2 bg-accent rounded hover:bg-accent-600">
+            Get Access
+          </Button>
+        </form>
+      </section>
     </Fragment>
   );
 };
