@@ -6,8 +6,10 @@ import React, { useState } from 'react'
 import { SunIcon } from "@radix-ui/react-icons"
 import { IoMoon, IoClose } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
+    const currentPath = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { theme, setTheme } = useTheme();
 
@@ -56,7 +58,7 @@ const Navbar = () => {
                 <nav className="hidden lg:flex">
                     <ul className="flex space-x-4">
                         {links.map((item) => (
-                            <li key={`${item.href}${item.label}`}>
+                            <li key={`${item.href}${item.label}`} className={`${currentPath == item.href ? 'border-b-2' : ''}`}>
                                 <Link href={item.href}>
                                     {item.label}
                                 </Link>
@@ -90,7 +92,7 @@ const Navbar = () => {
                         {links.map((item) => (
                             <li
                                 key={`${item.href}${item.label}`}
-                                className="py-2 border-b-2 w-full text-center border-gray-300"
+                                className={`${currentPath == item.href ? 'font-bold' : ''} ' py-2 border-b-2 w-full text-center border-gray-300'`}
                             >
                                 <Link href={item.href} onClick={() => setIsMenuOpen(false)}>
                                     {item.label}
