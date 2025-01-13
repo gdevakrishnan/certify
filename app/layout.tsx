@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         {/* Wrap the entire layout in the ThemeProvider */}
         <ThemeProvider attribute="class" defaultTheme="light">
-          <Theme>
+          <Theme accentColor="purple">
             <AppContextProvider>
               <Navbar />
               <main>{children}</main>

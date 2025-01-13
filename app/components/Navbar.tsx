@@ -7,7 +7,6 @@ import { SunIcon } from "@radix-ui/react-icons"
 import { IoMoon, IoClose } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
 import { usePathname } from 'next/navigation';
-
 const Navbar = () => {
     const currentPath = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,11 +19,11 @@ const Navbar = () => {
         { href: '/college/request', label: 'Request' },
         { href: '/college', label: 'College' },
     ];
-
+    
     return (
         <div>
             <header className="flex justify-between items-center px-6 py-4 border-b-2 w-full">
-                <Heading as="h1">Certify</Heading>
+                <Heading as="h1" className='text-purple-500'>Certify</Heading>
                 <div className='lg:hidden flex space-x-4'>
                     {/* Hamburger Button */}
                     {
