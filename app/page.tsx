@@ -1,6 +1,6 @@
+import Squares from "@/components/Squares";
 import { Box, Heading, Text } from "@radix-ui/themes";
 import React, { Fragment } from 'react';
-import Squares from "./components/Squares";
 
 const page = () => {
   return (

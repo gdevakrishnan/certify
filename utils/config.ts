@@ -24,3 +24,5 @@ declare module 'wagmi' {
         config: ReturnType<typeof getConfig>
     }
 }
+
+// Get the project id for Wallet access from: https://cloud.reown.com

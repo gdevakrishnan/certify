@@ -1,6 +1,6 @@
+import { WalletInfo } from '@/components/WalletInfo'
+import { WalletOptions } from '@/components/WalletOption'
 import React, { Fragment } from 'react'
-import { WalletOptions } from '../components/WalletOption'
-import { WalletInfo } from '../components/WalletInfo'
 
 const connectPage = () => {
   return (
