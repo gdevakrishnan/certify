@@ -7,6 +7,10 @@ import Navbar from "./components/Navbar";
 import AppContextProvider from "./context/AppContextProvider";
 import { ThemeProvider } from "next-themes";
 import Footer from "./components/Footer";
+import { Providers } from "./providers";
+import { getConfig } from "@/utils/config";
+import { headers } from "next/headers";
+import { cookieToInitialState } from "wagmi";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +27,16 @@ export const metadata: Metadata = {
   description: "Certificate generation and validation using Web3",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
+  const cookieHeader = headerList.get("cookie");
+  const initialState = cookieToInitialState(getConfig(), cookieHeader);
+
+
   return (
     <html lang="en">
       <body
@@ -37,9 +46,11 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light">
           <Theme accentColor="purple">
             <AppContextProvider>
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
+              <Providers initialState={initialState}>   {/* Providers for wagmi connectors and getConfig */}
+                <Navbar />
+                <main>{children}</main>
+                <Footer />
+              </Providers>
             </AppContextProvider>
           </Theme>
         </ThemeProvider>

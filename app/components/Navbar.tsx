@@ -14,6 +14,7 @@ const Navbar = () => {
 
     const links = [
         { href: '/', label: 'Home' },
+        { href: '/connect', label: 'Connect' },
         { href: '/certificate/generate', label: 'Generate' },
         { href: '/certificate/validate', label: 'Validate' },
         { href: '/college/request', label: 'Request' },
