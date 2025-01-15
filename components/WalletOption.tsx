@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button, Heading } from '@radix-ui/themes';
+import { Button, Flex, Heading } from '@radix-ui/themes';
 import { Fragment } from 'react';
 import { useConnect } from 'wagmi'
 
@@ -9,8 +9,8 @@ export function WalletOptions() {
   return (
     <Fragment>
       <section className='py-4 justify-center items-center flex'>
-        <Box className="flex flex-col space-y-4 p-6 max-w-md mx-auto my-8 rounded shadow-lg border-2 w-[300px] justify-center items-center">
-          <Heading as='h1'>Connect Wallet</Heading>
+        <Flex direction={"column"} gap={"2"} width={"250px"}>
+          <Heading as='h1' align={"center"} className='mb-2'>Connect Wallet</Heading>
           {
             connectors.map((connector) => (
               <Button
@@ -19,13 +19,13 @@ export function WalletOptions() {
                   e.preventDefault();
                   connect({ connector });
                 }}
-                className="px-8 py-2 w-full"
+                className="px-8 py-4"
               >
                 {connector.name}
               </Button>
             ))
           }
-        </Box>
+        </Flex>
       </section>
     </Fragment>
   );

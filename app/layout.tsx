@@ -3,14 +3,14 @@ import "./globals.css";
 import { Theme } from "@radix-ui/themes";
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import AppContextProvider from "./context/AppContextProvider";
-import { ThemeProvider } from "next-themes";
 import { Providers } from "./providers";
 import { getConfig } from "@/utils/config";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AppContextProvider from "@/context/AppContextProvider";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

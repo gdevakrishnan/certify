@@ -4,9 +4,9 @@ import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors'
 
 export function getConfig() {
     return createConfig({
-        chains: [mainnet, sepolia],
+        chains: [sepolia],
         transports: {
-            [mainnet.id]: http(),
+            // [mainnet.id]: http(),
             [sepolia.id]: http(),
         },
         connectors: [coinbaseWallet(), injected(), walletConnect({
@@ -18,6 +18,21 @@ export function getConfig() {
         ssr: true
     })
 }
+
+export const config = createConfig({
+    chains: [sepolia],
+    transports: {
+        // [mainnet.id]: http(),
+        [sepolia.id]: http(),
+    },
+    connectors: [coinbaseWallet(), injected(), walletConnect({
+        projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID ?? ''
+    })],
+    storage: createStorage({
+        storage: cookieStorage
+    }),
+    ssr: true
+})
 
 declare module 'wagmi' {
     interface Register {
