@@ -1,20 +1,28 @@
-'use client'
-import { useAccount, useDisconnect } from 'wagmi'
+'use client' // Make sure this is at the very top
+
+import { Button } from '@radix-ui/themes';
+import { useRouter } from 'next/navigation';
+import { useAccount, useDisconnect } from 'wagmi';
 
 export function WalletInfo() {
-    const { address, isConnected } = useAccount()
-    const { disconnect } = useDisconnect()
+  const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+  const router = useRouter();
 
-    return isConnected ? (
-        <div className="my-4 flex flex-col gap-2 text-center">
-            <button
-                onClick={() => disconnect()}
-                className="mx-auto max-w-[200px] rounded-lg border border-white/55 px-8 py-2 duration-200 hover:border-white/85 hover:bg-zinc-800/40"
-            >
-                Disconnect
-            </button>
-            <span className="text-2xl opacity-75">Wallet Address</span>
-            <span className="text-xl">{address}</span>
-        </div>
-    ) : null
+  return isConnected ? (
+    <div className="my-4 flex flex-col gap-2 text-center">
+      <span className="text-2xl opacity-75">Wallet Address</span>
+      <span className="text-xl">{address}</span>
+      <Button
+        onClick={(e) => {
+          e.preventDefault();
+          disconnect();
+          router.push('/'); // This should work once the router is mounted
+        }}
+        className="mx-auto max-w-[200px] px-8 py-2"
+      >
+        Disconnect
+      </Button>
+    </div>
+  ) : null;
 }

@@ -1,12 +1,12 @@
 // College Profile
-import { Heading } from '@radix-ui/themes'
+import { WalletInfo } from '@/components/WalletInfo'
 import React from 'react'
 
 const CollegeProfile = () => {
   return (
-    <div>
-      <Heading as='h1'>CollegeProfile</Heading>
-    </div>
+    <section className='min-h-screen'>
+      <WalletInfo />
+    </section>
   )
 }
 

@@ -5,8 +5,10 @@ import React, { Fragment } from 'react'
 const connectPage = () => {
   return (
     <Fragment>
+      <section className='min-h-screen'>
         <WalletOptions />
-        <WalletInfo />
+        {/* <WalletInfo /> */}
+      </section>
     </Fragment>
   )
 }

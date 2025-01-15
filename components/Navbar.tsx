@@ -7,18 +7,21 @@ import { SunIcon } from "@radix-ui/react-icons"
 import { IoMoon, IoClose } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
 import { usePathname } from 'next/navigation';
+import { useAccount } from 'wagmi';
+
 const Navbar = () => {
     const currentPath = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { theme, setTheme } = useTheme();
 
+    const { address, isConnected } = useAccount();
+
     const links = [
         { href: '/', label: 'Home' },
-        { href: '/connect', label: 'Connect' },
         { href: '/certificate/generate', label: 'Generate' },
         { href: '/certificate/validate', label: 'Validate' },
         { href: '/college/request', label: 'Request' },
-        { href: '/college', label: 'College' },
+        isConnected && address ? { href: '/college', label: `${address.slice(0, 7)}...${address.slice(-5)}` } : { href: '/connect', label: 'Connect' }
     ];
     
     return (
