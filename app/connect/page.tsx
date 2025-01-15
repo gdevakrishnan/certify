@@ -7,7 +7,7 @@ const connectPage = () => {
     <Fragment>
       <section className='min-h-screen'>
         <WalletOptions />
-        {/* <WalletInfo /> */}
+        <WalletInfo />
       </section>
     </Fragment>
   )
