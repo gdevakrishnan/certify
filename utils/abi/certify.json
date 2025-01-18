@@ -1,563 +1,633 @@
 [
-    {
-      "inputs": [],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "certificateId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "collegeId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "collegeName",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "studentName",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "studentPercentage",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "courseName",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "issueDate",
-          "type": "string"
-        }
-      ],
-      "name": "certificateGenerated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_collegeAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "_collegeName",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "_collegeDistrict",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "_collegeState",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_collegePhNo",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_collegePinCode",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "message",
-          "type": "string"
-        }
-      ],
-      "name": "collegeCreated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "_collegeAddress",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "_collegeName",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "_collegeDistrict",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "_collegeState",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_collegePhNo",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "_collegePinCode",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "message",
-          "type": "string"
-        }
-      ],
-      "name": "collegeReqCreated",
-      "type": "event"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_collegeAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "string",
-          "name": "_collegeName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_collegeDistrict",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_collegeState",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_collegePhNo",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_collegePinCode",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "index",
-          "type": "uint256"
-        }
-      ],
-      "name": "createCollege",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_collegeName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_collegeDistrict",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_collegeState",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_collegePhNo",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_collegePinCode",
-          "type": "uint256"
-        }
-      ],
-      "name": "createCollegeReq",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_collegeId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "string",
-          "name": "_collegeName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_studentName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_studentPercentage",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_courseName",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_issueDate",
-          "type": "string"
-        }
-      ],
-      "name": "generateCertificate",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getAllApprovedColleges",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "collegeId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "collegeAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeDistrict",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeState",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegePhNo",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegePinCode",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct Certify.ApprovedCollegeStruct[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getAllRequestedColleges",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "address",
-              "name": "collegeAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeDistrict",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeState",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegePhNo",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegePinCode",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct Certify.CollegeStruct[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_collegeId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getApprovedCollegeById",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "collegeId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "collegeAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeDistrict",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeState",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegePhNo",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegePinCode",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct Certify.ApprovedCollegeStruct",
-          "name": "",
-          "type": "tuple"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_certificateId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getCertificateById",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "certificateId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegeId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "studentName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "studentPercentage",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "courseName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "issueDate",
-              "type": "string"
-            }
-          ],
-          "internalType": "struct Certify.CertificateStruct",
-          "name": "",
-          "type": "tuple"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_collegeId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getCollegeCertificates",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "certificateId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "collegeId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "string",
-              "name": "collegeName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "studentName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "studentPercentage",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "courseName",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "issueDate",
-              "type": "string"
-            }
-          ],
-          "internalType": "struct Certify.CertificateStruct[]",
-          "name": "",
-          "type": "tuple[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_collegeAddress",
-          "type": "address"
-        }
-      ],
-      "name": "getCollegeIdByAddress",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "isAdmin",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ]
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "certificateId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collegeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "collegeName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "studentName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "studentPercentage",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "courseName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "issueDate",
+        "type": "string"
+      }
+    ],
+    "name": "certificateGenerated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_collegeAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_collegeName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_collegeDistrict",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_collegeState",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_collegePhNo",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_collegePinCode",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "message",
+        "type": "string"
+      }
+    ],
+    "name": "collegeCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_collegeAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_collegeName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_collegeDistrict",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "_collegeState",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_collegePhNo",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_collegePinCode",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "message",
+        "type": "string"
+      }
+    ],
+    "name": "collegeReqCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_collegeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_collegeName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_collegeDistrict",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_collegeState",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collegePhNo",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collegePinCode",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "createCollege",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_collegeName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_collegeDistrict",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_collegeState",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collegePhNo",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collegePinCode",
+        "type": "uint256"
+      }
+    ],
+    "name": "createCollegeReq",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_collegeId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_collegeName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_studentName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_studentPercentage",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_courseName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_issueDate",
+        "type": "string"
+      }
+    ],
+    "name": "generateCertificate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllApprovedColleges",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "collegeId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "collegeAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeDistrict",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeState",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegePhNo",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegePinCode",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Certify.ApprovedCollegeStruct[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllRequestedColleges",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "collegeAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeDistrict",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeState",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegePhNo",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegePinCode",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Certify.CollegeStruct[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_collegeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getApprovedCollegeById",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "collegeId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "collegeAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeDistrict",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeState",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegePhNo",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegePinCode",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Certify.ApprovedCollegeStruct",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_certificateId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCertificateById",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "certificateId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegeId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "studentName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "studentPercentage",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "courseName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "issueDate",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct Certify.CertificateStruct",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_collegeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCollegeCertificates",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "certificateId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "collegeId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "collegeName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "studentName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "studentPercentage",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "courseName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "issueDate",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct Certify.CertificateStruct[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_collegeAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getCollegeIdByAddress",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRequestedCollegesLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isAdmin",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "removeCollegeReq",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "requestedColleges",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "collegeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "collegeName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "collegeDistrict",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "collegeState",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "collegePhNo",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "collegePinCode",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
