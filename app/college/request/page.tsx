@@ -48,7 +48,7 @@ const CollegeRequests = () => {
 
       try {
         await writeContract({
-          address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+          address: '0x7863c103EC0B4B7c3B78F566a1b81f56094337B1',
           abi: contractABI,
           functionName: 'createCollegeReq',
           args: [

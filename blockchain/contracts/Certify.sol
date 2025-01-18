@@ -2,11 +2,8 @@
 pragma solidity ^0.8.0;
 
 contract Certify {
-    // Admin
     address private admin;
 
-    // Structures
-    // College Structure
     struct CollegeStruct {
         address collegeAddress;
         string collegeName;
@@ -16,7 +13,6 @@ contract Certify {
         uint256 collegePinCode;
     }
 
-    // Approved College Structure
     struct ApprovedCollegeStruct {
         uint256 collegeId;
         address collegeAddress;
@@ -27,7 +23,6 @@ contract Certify {
         uint256 collegePinCode;
     }
 
-    // Verified Certificates
     struct CertificateStruct {
         uint256 certificateId;
         uint256 collegeId;
@@ -38,28 +33,23 @@ contract Certify {
         string issueDate;
     }
 
-    // ID
     uint256 private collegeId = 1;
     uint256 private certificateId = 1;
 
-    // Mappings
-    mapping(uint256 => CollegeStruct) private college; // approved colleges
-    mapping(uint256 => ApprovedCollegeStruct) private approvedCollegeMap; // approved colleges
-    mapping(address => uint256) private collegeIdCollection; // approved colleges ID
-    mapping(uint256 => CertificateStruct) private certificateCollections; // All generated certificates
-    mapping(uint256 => CertificateStruct[]) private collegeCertificates; // All certificates of a college
+    mapping(uint256 => CollegeStruct) private college;
+    mapping(uint256 => ApprovedCollegeStruct) private approvedCollegeMap;
+    mapping(address => uint256) private collegeIdCollection;
+    mapping(uint256 => CertificateStruct) private certificateCollections;
+    mapping(uint256 => CertificateStruct[]) private collegeCertificates;
 
-    // Arrays
-    CollegeStruct[] private requestedColleges; // college requests
-    ApprovedCollegeStruct[] private approvedColleges; // Approved colleges
+    CollegeStruct[] public requestedColleges;
+    ApprovedCollegeStruct[] private approvedColleges;
 
-    // Admin Modifier
     modifier onlyAdmin() {
         require(msg.sender == admin, "You are not an Admin");
         _;
     }
 
-    // Events
     event collegeCreated(
         address _collegeAddress,
         string _collegeName,
@@ -94,7 +84,6 @@ contract Certify {
         admin = msg.sender;
     }
 
-    // create new college request
     function createCollegeReq(
         string memory _collegeName,
         string memory _collegeDistrict,
@@ -123,16 +112,14 @@ contract Certify {
         );
     }
 
-    // Remove college request
     function removeCollegeReq(uint256 index) internal {
-        require(index < requestedColleges.length, "Index out of bounds");
-        requestedColleges[index] = requestedColleges[
-            requestedColleges.length - 1
-        ];
+        uint256 lastIndex = requestedColleges.length - 1;
+        if (index < lastIndex) {
+            requestedColleges[index] = requestedColleges[lastIndex];
+        }
         requestedColleges.pop();
     }
 
-    // Create college by admin
     function createCollege(
         address _collegeAddress,
         string memory _collegeName,
@@ -150,18 +137,7 @@ contract Certify {
             _collegePhNo,
             _collegePinCode
         );
-        approvedColleges.push(
-            ApprovedCollegeStruct(
-                collegeId,
-                _collegeAddress,
-                _collegeName,
-                _collegeDistrict,
-                _collegeState,
-                _collegePhNo,
-                _collegePinCode
-            )
-        );
-        approvedCollegeMap[collegeId] = ApprovedCollegeStruct(
+        ApprovedCollegeStruct memory newApprovedCollege = ApprovedCollegeStruct(
             collegeId,
             _collegeAddress,
             _collegeName,
@@ -170,6 +146,8 @@ contract Certify {
             _collegePhNo,
             _collegePinCode
         );
+        approvedColleges.push(newApprovedCollege);
+        approvedCollegeMap[collegeId] = newApprovedCollege;
         removeCollegeReq(index);
         collegeIdCollection[_collegeAddress] = collegeId;
 
@@ -182,10 +160,9 @@ contract Certify {
             _collegePinCode,
             "College created successfully"
         );
-        collegeId += 1;
+        collegeId++;
     }
 
-    // Get all approved colleges
     function getAllApprovedColleges()
         public
         view
@@ -195,7 +172,6 @@ contract Certify {
         return approvedColleges;
     }
 
-    // Get an approved college
     function getApprovedCollegeById(uint256 _collegeId)
         public
         view
@@ -204,20 +180,16 @@ contract Certify {
         return approvedCollegeMap[_collegeId];
     }
 
-    // Get approved college by address
     function getCollegeIdByAddress(address _collegeAddress)
         public
         view
         returns (uint256)
     {
-        require(
-            collegeIdCollection[_collegeAddress] != 0,
-            "College address not found"
-        );
-        return collegeIdCollection[_collegeAddress];
+        uint256 id = collegeIdCollection[_collegeAddress];
+        require(id != 0, "College address not found");
+        return id;
     }
 
-    // Get all requested colleges
     function getAllRequestedColleges()
         public
         view
@@ -227,17 +199,10 @@ contract Certify {
         return requestedColleges;
     }
 
-    // Check if the college is approved by collegeId
     function isApprovedCollege(uint256 _collegeId) private view returns (bool) {
-        for (uint256 i = 0; i < approvedColleges.length; i++) {
-            if (approvedColleges[i].collegeId == _collegeId) {
-                return true; // College is approved
-            }
-        }
-        return false; // College is not approved
+        return approvedCollegeMap[_collegeId].collegeId == _collegeId;
     }
 
-    // function to generate a certificate
     function generateCertificate(
         uint256 _collegeId,
         string memory _collegeName,
@@ -246,46 +211,33 @@ contract Certify {
         string memory _courseName,
         string memory _issueDate
     ) public {
-        bool flag = isApprovedCollege(_collegeId);
-        if (flag == true) {
-            certificateCollections[certificateId] = CertificateStruct(
-                certificateId,
-                _collegeId,
-                _collegeName,
-                _studentName,
-                _studentPercentage,
-                _courseName,
-                _issueDate
-            );
+        require(isApprovedCollege(_collegeId), "College is not approved");
 
-            // Use _collegeId here instead of collegeId
-            collegeCertificates[_collegeId].push(
-                CertificateStruct(
-                    certificateId,
-                    _collegeId,
-                    _collegeName,
-                    _studentName,
-                    _studentPercentage,
-                    _courseName,
-                    _issueDate
-                )
-            );
+        CertificateStruct memory newCertificate = CertificateStruct(
+            certificateId,
+            _collegeId,
+            _collegeName,
+            _studentName,
+            _studentPercentage,
+            _courseName,
+            _issueDate
+        );
+        certificateCollections[certificateId] = newCertificate;
+        collegeCertificates[_collegeId].push(newCertificate);
 
-            emit certificateGenerated(
-                certificateId,
-                _collegeId,
-                _collegeName,
-                _studentName,
-                _studentPercentage,
-                _courseName,
-                _issueDate
-            );
+        emit certificateGenerated(
+            certificateId,
+            _collegeId,
+            _collegeName,
+            _studentName,
+            _studentPercentage,
+            _courseName,
+            _issueDate
+        );
 
-            certificateId += 1;
-        }
+        certificateId++;
     }
 
-    // Get certificate by ID
     function getCertificateById(uint256 _certificateId)
         public
         view
@@ -294,29 +246,32 @@ contract Certify {
         return certificateCollections[_certificateId];
     }
 
-    // Get all the certificates of a college
     function getCollegeCertificates(uint256 _collegeId)
         public
         view
         returns (CertificateStruct[] memory)
     {
-        bool flag = isApprovedCollege(_collegeId);
-        require(flag == true, "College is not approved");
+        require(isApprovedCollege(_collegeId), "College is not approved");
         return collegeCertificates[_collegeId];
     }
 
-    // To check the address is Admin
     function isAdmin() public view returns (bool) {
-        if (admin == msg.sender) {
-            return true;
-        } else {
-            return false;
-        }
+        return msg.sender == admin;
+    }
+
+    function getRequestedCollegesLength()
+        public
+        view
+        onlyAdmin
+        returns (uint256)
+    {
+        return requestedColleges.length;
     }
 }
 
-// Deployed Contract Address: 0x7B10654a97908d5dD3f97A0f5Af6D07b4fe6dFe5
-// Reference for wagmi: 
+// Deployed Contract 1. Address: 0x7B10654a97908d5dD3f97A0f5Af6D07b4fe6dFe5
+// Deployed Contract 2. Address: 0x5C199117a315333DCBe177AFe1e8dd42737067Ff
+// Reference for wagmi:
 // https://github.com/gopiinho/web3-frontends/blob/main/src/utils/config.ts
 // https://github.com/Vishwa9011/next-wagmi-template
 // YT channel for wagmi: Gopinho

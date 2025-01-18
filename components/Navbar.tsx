@@ -33,7 +33,7 @@ const Navbar = () => {
         { href: '/certificate/generate', label: 'Generate' },
         { href: '/certificate/validate', label: 'Validate' },
         isConnected && address
-            ? { href: '/college', label: `${address.slice(0, 7)}...${address.slice(-5)}` }
+            ? { href: '/profile', label: `${address.slice(0, 7)}...${address.slice(-5)}` }
             : { href: '/connect', label: 'Connect' },
     ];
 

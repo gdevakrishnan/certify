@@ -5,7 +5,7 @@ import { sepolia } from 'viem/chains';
 import { config } from '../config';
 import { Address } from 'viem';
 
-const CONTRACT_ADDRESS = '0x7B10654a97908d5dD3f97A0f5Af6D07b4fe6dFe5';
+const CONTRACT_ADDRESS = '0x7863c103EC0B4B7c3B78F566a1b81f56094337B1';
 
 export const useReadContract = (functionName: string, account : Address | undefined) => {
   const [data, setData] = useState<any | null>(null);
