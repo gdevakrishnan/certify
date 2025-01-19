@@ -8,6 +8,10 @@ import { IoMoon, IoClose } from 'react-icons/io5';
 import { FaBars } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import { useAccount } from 'wagmi';
+import { readContract } from '@wagmi/core';
+import { config } from '@/utils/config';
+import contractABI from '@/utils/abi/certify.json';
+import { sepolia } from 'viem/chains';
 // import { useReadContract } from '@/utils/hooks/useReadContract';
 
 const Navbar = () => {
@@ -16,25 +20,46 @@ const Navbar = () => {
     const { theme, setTheme } = useTheme();
     const { address, isConnected } = useAccount();
 
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
     // Web3 to read the contract
+    const CONTRACT_ADDRESS = '0x96EC6272b3bD0c5934b150dc8ca9ea4FF0009BeA';
 
-    // const [isAdmin, setIsAdmin] = useState(false);
+    const fetchIsAdmin = async () => {
+        if (!address) return;
 
-    // const { data, error } = useReadContract('isAdmin', address);
+        try {
+            const isadmin = await readContract(config, {
+                abi: contractABI,
+                address: CONTRACT_ADDRESS as `0x${string}`,
+                functionName: 'isAdmin',
+                chainId: sepolia.id,
+                account: address,
+            });
 
-    // useEffect(() => {
-    //     if (error) console.error(error);
-    //     if (data === true || data === false) setIsAdmin(data);
-    // }, [data, error]);
+            setIsAdmin(isadmin as boolean);
+        } catch (err: any) {
+            console.error('Error fetching data:', err);
+        }
+    }
+
+    if (address) fetchIsAdmin();
 
     const links = [
         { href: '/', label: 'Home' },
-        { href: '/college/request', label: 'Request' }, 
-        { href: '/certificate/generate', label: 'Generate' },
-        { href: '/certificate/validate', label: 'Validate' },
-        isConnected && address
-            ? { href: '/profile', label: `${address.slice(0, 7)}...${address.slice(-5)}` }
-            : { href: '/connect', label: 'Connect' },
+        ...(isConnected ? (
+            isAdmin ? [
+                { href: '/certificate/validate', label: 'Validate' },
+                { href: '/profile', label: address ? `${address.slice(0, 7)}...${address.slice(-5)}` : 'Profile' }
+            ] : [
+                { href: '/college/request', label: 'Request' },
+                { href: '/certificate/generate', label: 'Generate' },
+                { href: '/certificate/validate', label: 'Validate' },
+                { href: '/profile', label: address ? `${address.slice(0, 7)}...${address.slice(-5)}` : 'Profile' }
+            ]
+        ) : [
+            { href: '/connect', label: 'Connect' }
+        ])
     ];
 
     return (
@@ -93,9 +118,8 @@ const Navbar = () => {
                         {links.map((item) => (
                             <li
                                 key={`${item.href}${item.label}`}
-                                className={`${
-                                    currentPath == item.href ? 'font-bold' : ''
-                                } py-2 border-b-2 w-full text-center border-gray-300`}
+                                className={`${currentPath == item.href ? 'font-bold' : ''
+                                    } py-2 border-b-2 w-full text-center border-gray-300`}
                             >
                                 <Link href={item.href} onClick={() => setIsMenuOpen(false)}>
                                     {item.label}

@@ -83,7 +83,7 @@ const Profile = () => {
                 account: address,
             });
 
-            setIsAdmin(isadmin);
+            setIsAdmin(isadmin as boolean);
         } catch (err: any) {
             console.error('Error fetching data:', err);
             setError(err.message || 'An error occurred');
