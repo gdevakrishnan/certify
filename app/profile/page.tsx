@@ -15,8 +15,14 @@ const Profile = () => {
     const CONTRACT_ADDRESS = '0x96EC6272b3bD0c5934b150dc8ca9ea4FF0009BeA';
 
     const [transactionStatus, setTransactionStatus] = useState<string | null>(null);
+
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+    const [collegeId, setCollegeId] = useState<bigint | null>(null);
+    const [collegeData, setCollegeData] = useState<any | null>(null);
+
     const [data, setData] = useState<any | null>(null);
     const [error, setError] = useState<string | null>(null);
+
     const { address } = useAccount();
 
 
@@ -65,6 +71,25 @@ const Profile = () => {
     );
 
     // Web 3 Read Fetch Data
+    const fetchIsAdmin = async () => {
+        if (!address) return;
+
+        try {
+            const isadmin = await readContract(config, {
+                abi: contractABI,
+                address: CONTRACT_ADDRESS as `0x${string}`,
+                functionName: 'isAdmin',
+                chainId: sepolia.id,
+                account: address,
+            });
+
+            setIsAdmin(isadmin);
+        } catch (err: any) {
+            console.error('Error fetching data:', err);
+            setError(err.message || 'An error occurred');
+        }
+    }
+
     const fetchData = async () => {
         if (!address) return;
 
@@ -84,17 +109,83 @@ const Profile = () => {
         }
     };
 
-    useEffect(() => {
-        if (address) {
-            fetchData();
+    const fetchCollegeId = async () => {
+        if (!address) return;
+
+        try {
+            const collegeid = await readContract(config, {
+                abi: contractABI,
+                address: CONTRACT_ADDRESS as `0x${string}`,
+                functionName: 'getCollegeIdByAddress',
+                chainId: sepolia.id,
+                account: address,
+                args: [
+                    address
+                ]
+            });
+
+            setCollegeId(typeof collegeid == "bigint" ? collegeid : null);
+        } catch (err: any) {
+            console.error('Error fetching data:', err);
+            setError(err.message || 'An error occurred');
         }
+    }
+
+    const fetchCollegeDetails = async () => {
+        if (!address || !collegeId) return;
+
+        try {
+            const collegedata = await readContract(config, {
+                abi: contractABI,
+                address: CONTRACT_ADDRESS as `0x${string}`,
+                functionName: 'getApprovedCollegeById',
+                chainId: sepolia.id,
+                account: address,
+                args: [
+                    collegeId
+                ]
+            });
+            setCollegeData(collegedata);
+        } catch (err: any) {
+            console.error('Error fetching data:', err);
+            setError(err.message || 'An error occurred');
+        }
+    }
+
+    useEffect(() => {
+        if (address) fetchCollegeId();
     }, [address]);
+
+    useEffect(() => {
+        if (address) fetchData();
+    }, [address]);
+
+    if (address) fetchCollegeId();
+
+    if (address) fetchIsAdmin();
+
+    useEffect(() => {
+        fetchCollegeDetails();
+    }, [collegeId]);
 
     return (
         <section className="min-h-screen">
-            <WalletInfo />
+            {isAdmin && (<WalletInfo isadmin={isAdmin} collegeName={null} />)}
+            {collegeData && (<WalletInfo isadmin={null} collegeName={collegeData.collegeName} />)}
             {
-                (data && data.length > 0) ? (
+                (!isAdmin && collegeData && collegeData.collegeName) ? (
+                    <Fragment>
+                        <Flex direction={'column'} className='p-6 max-w-md mx-auto my-8 rounded shadow-lg flex flex-col border-2 space-y-1'>
+                            <Heading as='h1'>{collegeData.collegeName}</Heading>
+                            <Text>{`${collegeData.collegeAddress.slice(0, 7)}...${collegeData.collegeAddress.slice(-5)}`}</Text>
+                            <Text>{collegeData.collegeDistrict}, {collegeData.collegeState} - {collegeData.collegePinCode}</Text>
+                            <Text>ph-no: {collegeData.collegePhNo}</Text>
+                        </Flex>
+                    </Fragment>
+                ) : null
+            }
+            {
+                (isAdmin && data && data.length > 0) ? (
                     <div className="p-4">
                         <Text className='mx-auto text-end block max-w-md'>Total Requests: {data.length}</Text>
                         {transactionStatus && <Text className='mx-auto text-end block max-w-md mt-2 text-green-500'>{transactionStatus}</Text>}

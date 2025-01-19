@@ -13,7 +13,6 @@ const formSchema = z.object({
   collegeName: z.string().min(1, { message: 'College Name is required' }),
   collegeDistrict: z.string().min(1, { message: 'College District is required' }),
   collegeState: z.string().min(1, { message: 'College State is required' }),
-  collegeEmail: z.string().email({ message: 'Invalid Email Address' }),
   collegePhNo: z
     .string()
     .min(1, { message: 'College Phone Number is required' })
@@ -90,7 +89,6 @@ const CollegeRequests = () => {
       { label: 'College Name', id: 'collegeName', type: 'text', placeholder: 'College Name' },
       { label: 'College District', id: 'collegeDistrict', type: 'text', placeholder: 'College District' },
       { label: 'College State', id: 'collegeState', type: 'text', placeholder: 'College State' },
-      { label: 'College Email', id: 'collegeEmail', type: 'email', placeholder: 'College Email' },
       { label: 'College Phone Number', id: 'collegePhNo', type: 'text', placeholder: 'College Phone Number' },
       { label: 'College Pin Code', id: 'collegePinCode', type: 'text', placeholder: 'College Pin Code' },
     ],
