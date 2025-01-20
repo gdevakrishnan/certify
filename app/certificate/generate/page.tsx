@@ -1,10 +1,17 @@
 'use client';
 
+import { config } from '@/utils/config';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Flex } from '@radix-ui/themes';
-import React, { Fragment, useState } from 'react';
+import { Button, Flex, Text } from '@radix-ui/themes';
+import { readContract } from '@wagmi/core';
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
+import { useWriteContract } from 'wagmi';
+import contractABI from '@/utils/abi/certify.json';
 import { z } from 'zod';
+import { sepolia } from 'viem/chains';
+import { useWatchContractEvent } from 'wagmi';
 
 // Schema for form validation
 const formSchema = z.object({
@@ -34,17 +41,67 @@ const formSchema = z.object({
 // Types for form data
 type FormData = z.infer<typeof formSchema>;
 
-const fields = [
-  { label: 'College ID', id: 'collegeId', type: 'text', placeholder: 'Enter College ID' },
-  { label: 'College Name', id: 'collegeName', type: 'text', placeholder: 'Enter College Name' },
-  { label: 'Student Name', id: 'studentName', type: 'text', placeholder: 'Enter Student Name' },
-  { label: 'Student Percentage', id: 'studentPercentage', type: 'text', placeholder: 'Enter Student Percentage' },
-  { label: 'Course Name', id: 'courseName', type: 'text', placeholder: 'Enter Course Name' },
-  { label: 'Issue Date', id: 'issueDate', type: 'date', placeholder: 'Select Issue Date' },
-];
-
-const GenerateCertificate: React.FC = () => {
+const GenerateCertificate = () => {
   const [certificateData, setCertificateData] = useState<FormData | null>(null);
+  const [transactionStatus, setTransactionStatus] = useState<string | null>(null);
+  const [certificateId, setCertificateId] = useState<bigint | null>(null);
+
+  // Memorize the fields for better performance
+  const fields = useMemo(
+    () => [
+      { label: 'College ID', id: 'collegeId', type: 'text', placeholder: 'Enter College ID' },
+      { label: 'College Name', id: 'collegeName', type: 'text', placeholder: 'Enter College Name' },
+      { label: 'Student Name', id: 'studentName', type: 'text', placeholder: 'Enter Student Name' },
+      { label: 'Student Percentage', id: 'studentPercentage', type: 'text', placeholder: 'Enter Student Percentage' },
+      { label: 'Course Name', id: 'courseName', type: 'text', placeholder: 'Enter Course Name' },
+      { label: 'Issue Date', id: 'issueDate', type: 'date', placeholder: 'Select Issue Date' },
+    ],
+    []
+  );
+
+  // Web3
+  // Is the college was registered or not
+  const CONTRACT_ADDRESS = '0x96EC6272b3bD0c5934b150dc8ca9ea4FF0009BeA';
+  const { address } = useAccount();
+
+  const { data: hash, error: writeError, isPending, writeContract } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
+
+  // Fetch college ID
+  const fetchCollegeId = async () => {
+    if (!address) return;
+
+    try {
+      const collegeid = await readContract(config, {
+        abi: contractABI,
+        address: CONTRACT_ADDRESS as `0x${string}`,
+        functionName: 'getCollegeIdByAddress',
+        chainId: sepolia.id,
+        account: address,
+        args: [
+          address
+        ]
+      });
+
+      return (typeof collegeid == "bigint" ? collegeid : null);
+    } catch (err: any) {
+      console.error('Error fetching data:', err);
+    }
+  }
+
+  // Watch contract events
+  useWatchContractEvent({
+    address: CONTRACT_ADDRESS as `0x${string}`,
+    abi: contractABI,
+    eventName: 'certificateGenerated',
+    onLogs(logs) {
+      setCertificateId((logs[0] as any).args.certificateId);
+      if ((logs[0] as any).args.certificateId) {
+        console.log("Certificate generated successfully!!!");
+      }
+    },
+  })
+
   const {
     register,
     handleSubmit,
@@ -54,10 +111,53 @@ const GenerateCertificate: React.FC = () => {
   });
 
   // Form submission handler
-  const onSubmit = (data: FormData) => {
-    setCertificateData(data);
-    console.log('Form Data:', data);
-  };
+  const onSubmit = useCallback(
+    async (data: FormData) => {
+      setCertificateData(data);
+      const collegeId = await fetchCollegeId();
+
+      if (!collegeId || collegeId < 1) return console.log("College ID not found");
+      if (parseInt(data?.collegeId?.toString() || '') != parseInt(collegeId.toString()))
+        return console.log("College ID Mismatch");
+
+      setTransactionStatus(null); // Reset status on new submission
+
+      try {
+        await writeContract({
+          address: CONTRACT_ADDRESS as `0x${string}`,
+          abi: contractABI,
+          functionName: 'generateCertificate',
+          args: [
+            data.collegeId,
+            data.collegeName,
+            data.studentName,
+            data.studentPercentage,
+            data.courseName,
+            data.issueDate
+          ],
+        });
+
+        setTransactionStatus('Transaction submitting! please wait...');
+      } catch (e) {
+        setTransactionStatus(`Error: ${(e as any)?.message}`);
+      }
+    }, [writeContract]
+  )
+
+  // Update transaction status on success or error
+  useEffect(() => {
+    if (isConfirmed) {
+      setTransactionStatus('Transaction confirmed successfully!');
+    } else if (writeError) {
+      setTransactionStatus(`Error: ${writeError.message}`);
+    }
+
+    if (isConfirmed || writeError) {
+      setTimeout(() => {
+        setTransactionStatus(null);
+      }, 3000);
+    }
+  }, [isConfirmed, writeError]);
 
   const renderError = (fieldId: keyof FormData, fieldErrors: FieldErrors<FormData>) => {
     const error = fieldErrors[fieldId];
@@ -93,6 +193,14 @@ const GenerateCertificate: React.FC = () => {
           <Button type="submit" className="w-full px-4 py-4 bg-accent rounded hover:bg-accent-600">
             Generate
           </Button>
+          {transactionStatus && (
+            <Text align={'center'}
+              className={`mt-4 text-center text-sm ${transactionStatus.startsWith('Error') ? 'text-red-500' : 'text-green-500'
+                }`}
+            >
+              {transactionStatus.startsWith('Error') ? "Error occured" : transactionStatus}
+            </Text>
+          )}
         </form>
         {
           (certificateData) && (
@@ -111,7 +219,7 @@ const GenerateCertificate: React.FC = () => {
                 <rect x="20" y="20" width="760" height="560" rx="15" fill="none" stroke="#9333EA" strokeWidth="8" />
 
                 {/* Title */}
-                <text x="400" y="100" textAnchor="middle" fill="#333" fontSize="40" fontWeight="bold">
+                <text x="400" y="100" textAnchor="middle" fill="#9333EA" fontSize="40" fontWeight="bold">
                   Certificate of Completion
                 </text>
 
@@ -128,7 +236,7 @@ const GenerateCertificate: React.FC = () => {
                 {/* Main Text - Using foreignObject for wrapping */}
                 <foreignObject x="100" y="220" width="600" height="300">
                   <div style={{ fontSize: '16px', color: '#555', textAlign: 'center', lineHeight: '1.5' }}>
-                    This is to certify that the student has successfully completed the <strong>{certificateData.courseName}</strong> program at 
+                    This is to certify that the student has successfully completed the <strong>{certificateData.courseName}</strong> program at
                     <strong> {certificateData.collegeName}</strong>, bearing  College ID <strong>{certificateData.collegeId}</strong>. The program was conducted
                     with the highest standards of academic excellence, equipping the student with essential skills and knowledge in the respective
                     field of study.
@@ -142,7 +250,12 @@ const GenerateCertificate: React.FC = () => {
                 <line x1="200" y1="450" x2="600" y2="450" stroke="#4a90e2" strokeWidth="2" strokeDasharray="5,5" />
 
                 {/* Footer text */}
-                <text x="400" y="500" textAnchor="middle" fill="#333" fontSize="14">
+                {
+                  <text x="400" y="500" textAnchor="middle" fill="#9333EA" fontSize="14">
+                    {(certificateId) ?  `Authenticated Certificate ID is ${certificateId}` : 'Certificate ID not issued' }
+                  </text>
+                }
+                <text x="400" y="530" textAnchor="middle" fill="#333" fontSize="14">
                   This certificate is digitally verified and authenticated.
                 </text>
               </svg>

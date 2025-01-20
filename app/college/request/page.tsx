@@ -40,6 +40,8 @@ const CollegeRequests = () => {
   const { data: hash, error: writeError, isPending, writeContract } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
 
+  const CONTRACT_ADDRESS = "0x96EC6272b3bD0c5934b150dc8ca9ea4FF0009BeA";
+
   // Form submission handler
   const onSubmit = useCallback(
     async (data: FormData) => {
@@ -47,7 +49,7 @@ const CollegeRequests = () => {
 
       try {
         await writeContract({
-          address: '0x96EC6272b3bD0c5934b150dc8ca9ea4FF0009BeA',
+          address: CONTRACT_ADDRESS as `0x${string}`,
           abi: contractABI,
           functionName: 'createCollegeReq',
           args: [
