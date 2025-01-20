@@ -247,14 +247,15 @@ const GenerateCertificate = () => {
                 </foreignObject>
 
                 {/* Signature line */}
-                <line x1="200" y1="450" x2="600" y2="450" stroke="#4a90e2" strokeWidth="2" strokeDasharray="5,5" />
+                <text x="400" y="450" textAnchor="middle" fill="#9333EA" fontSize="14">
+                  Obtained score is {certificateData.studentPercentage}%
+                </text>
+                <line x1="200" y1="470" x2="600" y2="470" stroke="#4a90e2" strokeWidth="2" strokeDasharray="5,5" />
 
                 {/* Footer text */}
-                {
-                  <text x="400" y="500" textAnchor="middle" fill="#9333EA" fontSize="14">
-                    {(certificateId) ?  `Authenticated Certificate ID is ${certificateId}` : 'Certificate ID not issued' }
-                  </text>
-                }
+                <text x="400" y="500" textAnchor="middle" fill="#9333EA" fontSize="14">
+                  {(certificateId) ? `Authenticated Certificate ID is ${certificateId}` : 'Certificate ID not issued'}
+                </text>
                 <text x="400" y="530" textAnchor="middle" fill="#333" fontSize="14">
                   This certificate is digitally verified and authenticated.
                 </text>
