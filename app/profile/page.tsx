@@ -12,7 +12,7 @@ import { useWaitForTransactionReceipt } from 'wagmi';
 import { config } from '@/utils/config';
 
 const Profile = () => {
-    const CONTRACT_ADDRESS = '0x96EC6272b3bD0c5934b150dc8ca9ea4FF0009BeA';
+    const CONTRACT_ADDRESS = '0x7eb9193dFAa562E7d8Fc0D236111CB03aF7a8b01';
 
     const [transactionStatus, setTransactionStatus] = useState<string | null>(null);
 
