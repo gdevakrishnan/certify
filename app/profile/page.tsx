@@ -165,13 +165,14 @@ const Profile = () => {
     if (address) fetchIsAdmin();
 
     useEffect(() => {
-        fetchCollegeDetails();
+        collegeId && fetchCollegeDetails();
     }, [collegeId]);
 
     return (
         <section className="min-h-screen">
             {isAdmin && (<WalletInfo isadmin={isAdmin} collegeName={null} />)}
             {collegeData && (<WalletInfo isadmin={null} collegeName={collegeData.collegeName} />)}
+            {!isAdmin && !collegeData && (<WalletInfo isadmin={null} collegeName={null} />)}
             {
                 (!isAdmin && collegeData && collegeData.collegeName) ? (
                     <Fragment>
@@ -185,7 +186,7 @@ const Profile = () => {
                 ) : null
             }
             {
-                (isAdmin && data && data.length > 0) ? (
+                (isAdmin && !collegeData && data && data.length > 0) ? (
                     <div className="p-4">
                         <Text className='mx-auto text-end block max-w-md'>Total Requests: {data.length}</Text>
                         {transactionStatus && <Text className='mx-auto text-end block max-w-md mt-2 text-green-500'>{transactionStatus}</Text>}
