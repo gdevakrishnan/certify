@@ -4,7 +4,7 @@ import { config } from '@/utils/config';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Flex, Table } from '@radix-ui/themes';
 import { readContract } from '@wagmi/core';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import contractABI from '@/utils/abi/certify.json';
 import { z } from 'zod';
@@ -30,9 +30,9 @@ const ValidateCertificate = () => {
   });
 
   const { address } = useAccount();
-  const CONTRACT_ADDRESS = '0x7eb9193dFAa562E7d8Fc0D236111CB03aF7a8b01';
+  const CONTRACT_ADDRESS = '0xf2609f6017816cF3BD2D1246E7936Dd920D537F0';
 
-  const fetchCollegeDetails = async (certificateId: number) => {
+  const fetchCertificateDetails = async (certificateId: number) => {
     if (!address || !certificateId) return;
 
     try {
@@ -46,7 +46,8 @@ const ValidateCertificate = () => {
           certificateId
         ]
       });
-      (certificateData && certificateData.studentData) ? setCertificateData(certificatedata) : null;
+
+      (certificatedata && (certificatedata as any).studentName) ? setCertificateData(certificatedata) : null;
     } catch (err: any) {
       console.error('Error fetching data:', err);
     }
@@ -54,13 +55,17 @@ const ValidateCertificate = () => {
 
   // Form submission handler
   const onSubmit = (data: FormData) => {
-    fetchCollegeDetails(data.certificateId);
+    fetchCertificateDetails(data.certificateId);
   };
 
   // Fields configuration
   const fields = [
     { label: "Certificate ID", id: "certificateId", type: "text", placeholder: "Enter Certificate ID" }
   ];
+
+  useEffect(() => {
+    console.log(certificateData);
+  }, [certificateData]);
 
   return (
     <Fragment>

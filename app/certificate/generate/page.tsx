@@ -61,7 +61,7 @@ const GenerateCertificate = () => {
 
   // Web3
   // Is the college was registered or not
-  const CONTRACT_ADDRESS = '0x7eb9193dFAa562E7d8Fc0D236111CB03aF7a8b01';
+  const CONTRACT_ADDRESS = '0xf2609f6017816cF3BD2D1246E7936Dd920D537F0';
   const { address } = useAccount();
 
   const { data: hash, error: writeError, isPending, writeContract } = useWriteContract();

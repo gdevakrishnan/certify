@@ -12,7 +12,7 @@ import { useWaitForTransactionReceipt } from 'wagmi';
 import { config } from '@/utils/config';
 
 const Profile = () => {
-    const CONTRACT_ADDRESS = '0x7eb9193dFAa562E7d8Fc0D236111CB03aF7a8b01';
+    const CONTRACT_ADDRESS = '0xf2609f6017816cF3BD2D1246E7936Dd920D537F0';
 
     const [transactionStatus, setTransactionStatus] = useState<string | null>(null);
 
@@ -72,7 +72,7 @@ const Profile = () => {
 
     // Web 3 Read Fetch Data
     const fetchIsAdmin = async () => {
-        if (!address) return;
+        if (!address && !isAdmin) return;
 
         try {
             const isadmin = await readContract(config, {
@@ -91,7 +91,7 @@ const Profile = () => {
     }
 
     const fetchData = async () => {
-        if (!address) return;
+        if (!address || !isAdmin) return;
 
         try {
             const result = await readContract(config, {
@@ -110,7 +110,7 @@ const Profile = () => {
     };
 
     const fetchCollegeId = async () => {
-        if (!address) return;
+        if (!address || isAdmin) return;
 
         try {
             const collegeid = await readContract(config, {
@@ -132,7 +132,7 @@ const Profile = () => {
     }
 
     const fetchCollegeDetails = async () => {
-        if (!address || !collegeId) return;
+        if (!address || !collegeId || isAdmin) return;
 
         try {
             const collegedata = await readContract(config, {
@@ -152,21 +152,25 @@ const Profile = () => {
         }
     }
 
+    if (address) fetchIsAdmin();
+
     useEffect(() => {
-        if (address) fetchCollegeId();
+        fetchIsAdmin()
+        if (address && !isAdmin) {
+            fetchCollegeId()
+        };
     }, [address]);
 
     useEffect(() => {
         if (address) fetchData();
-    }, [address]);
+    }, [address, data, isAdmin]);
 
     if (address) fetchCollegeId();
-
-    if (address) fetchIsAdmin();
 
     useEffect(() => {
         collegeId && fetchCollegeDetails();
     }, [collegeId]);
+
 
     return (
         <section className="min-h-screen">
@@ -177,6 +181,7 @@ const Profile = () => {
                 (!isAdmin && collegeData && collegeData.collegeName) ? (
                     <Fragment>
                         <Flex direction={'column'} className='p-6 max-w-md mx-auto my-8 rounded shadow-lg flex flex-col border-2 space-y-1'>
+                            <Text align={'right'}>College ID: <strong>{collegeData.collegeId}</strong></Text>
                             <Heading as='h1'>{collegeData.collegeName}</Heading>
                             <Text>{`${collegeData.collegeAddress.slice(0, 7)}...${collegeData.collegeAddress.slice(-5)}`}</Text>
                             <Text>{collegeData.collegeDistrict}, {collegeData.collegeState} - {collegeData.collegePinCode}</Text>
@@ -187,7 +192,7 @@ const Profile = () => {
             }
             {
                 (isAdmin && !collegeData && data && data.length > 0) ? (
-                    <div className="p-4">
+                    <div className="p-4" key={'1'}>
                         <Text className='mx-auto text-end block max-w-md'>Total Requests: {data.length}</Text>
                         {transactionStatus && <Text className='mx-auto text-end block max-w-md mt-2 text-green-500'>{transactionStatus}</Text>}
                         {

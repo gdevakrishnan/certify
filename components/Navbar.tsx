@@ -23,7 +23,7 @@ const Navbar = () => {
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
     // Web3 to read the contract
-    const CONTRACT_ADDRESS = '0x7eb9193dFAa562E7d8Fc0D236111CB03aF7a8b01';
+    const CONTRACT_ADDRESS = '0xf2609f6017816cF3BD2D1246E7936Dd920D537F0';
 
     const fetchIsAdmin = async () => {
         if (!address) return;

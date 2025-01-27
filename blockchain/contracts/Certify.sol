@@ -282,7 +282,7 @@ contract Certify {
     }
 }
 
-// Deployed Contract Address: 0x7eb9193dFAa562E7d8Fc0D236111CB03aF7a8b01
+// Deployed Contract Address: 0xf2609f6017816cF3BD2D1246E7936Dd920D537F0
 
 // Reference for wagmi:
 // https://github.com/gopiinho/web3-frontends/blob/main/src/utils/config.ts
