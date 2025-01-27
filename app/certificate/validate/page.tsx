@@ -46,7 +46,7 @@ const ValidateCertificate = () => {
           certificateId
         ]
       });
-      setCertificateData(certificatedata);
+      (certificateData && certificateData.studentData) ? setCertificateData(certificatedata) : null;
     } catch (err: any) {
       console.error('Error fetching data:', err);
     }
