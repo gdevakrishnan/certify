@@ -12,6 +12,8 @@ import contractABI from '@/utils/abi/certify.json';
 import { z } from 'zod';
 import { sepolia } from 'viem/chains';
 import { useWatchContractEvent } from 'wagmi';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 // Schema for form validation
 const formSchema = z.object({
@@ -164,6 +166,21 @@ const GenerateCertificate = () => {
     return error ? <p className="mt-1 text-xs text-red-500">{error.message}</p> : null;
   };
 
+  const generatePDF = async () => {
+    const input = document.getElementById('certificate-svg');
+    if (input) {
+      const canvas = await html2canvas(input);
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height],
+      });
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save('certificate.pdf');
+    }
+  };
+
   return (
     <Fragment>
       <section className="min-h-screen w-full">
@@ -204,62 +221,69 @@ const GenerateCertificate = () => {
         </form>
         {
           (certificateData) && (
-            <Flex justify={'center'} align={'center'}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="500"
-                height="600"
-                viewBox="0 0 800 600"
-                style={{
-                  borderRadius: '15px',
-                  fontFamily: 'Arial, sans-serif',
-                }}
-              >
-                {/* Outer border */}
-                <rect x="20" y="20" width="760" height="560" rx="15" fill="none" stroke="#9333EA" strokeWidth="8" />
+            <Flex justify={'center'} align={'center'} direction={'column'} className="my-8">
+              <div id="certificate-svg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="500"
+                  height="600"
+                  viewBox="0 0 800 600"
+                  style={{
+                    borderRadius: '15px',
+                    fontFamily: 'Arial, sans-serif',
+                  }}
+                >
+                  {/* Outer border */}
+                  <rect x="20" y="20" width="760" height="560" rx="15" fill="none" stroke="#9333EA" strokeWidth="8" />
 
-                {/* Title */}
-                <text x="400" y="100" textAnchor="middle" fill="#9333EA" fontSize="40" fontWeight="bold">
-                  Certificate of Completion
-                </text>
+                  {/* Title */}
+                  <text x="400" y="100" textAnchor="middle" fill="#9333EA" fontSize="40" fontWeight="bold">
+                    Certificate of Completion
+                  </text>
 
-                {/* Subtitle */}
-                <text x="400" y="150" textAnchor="middle" fill="#555" fontSize="20" fontStyle="italic">
-                  This certificate is proudly presented to
-                </text>
+                  {/* Subtitle */}
+                  <text x="400" y="150" textAnchor="middle" fill="#555" fontSize="20" fontStyle="italic">
+                    This certificate is proudly presented to
+                  </text>
 
-                {/* Student Name */}
-                <text id="studentName" x="400" y="200" textAnchor="middle" fontSize="30" fontWeight="bold" fill="#9333EA">
-                  {certificateData.studentName}
-                </text>
+                  {/* Student Name */}
+                  <text id="studentName" x="400" y="200" textAnchor="middle" fontSize="30" fontWeight="bold" fill="#9333EA">
+                    {certificateData.studentName}
+                  </text>
 
-                {/* Main Text - Using foreignObject for wrapping */}
-                <foreignObject x="100" y="220" width="600" height="300">
-                  <div style={{ fontSize: '16px', color: '#555', textAlign: 'center', lineHeight: '1.5' }}>
-                    This is to certify that the student has successfully completed the <strong>{certificateData.courseName}</strong> program at
-                    <strong> {certificateData.collegeName}</strong>, bearing  College ID <strong>{certificateData.collegeId}</strong>. The program was conducted
-                    with the highest standards of academic excellence, equipping the student with essential skills and knowledge in the respective
-                    field of study.
-                    <br /><br />
-                    The certificate is being issued on <strong>{certificateData.issueDate}</strong>, as a recognition of the student’s dedication, hard
-                    work, and successful achievement in fulfilling all the requirements of the program.
-                  </div>
-                </foreignObject>
+                  {/* Main Text - Using foreignObject for wrapping */}
+                  <foreignObject x="100" y="220" width="600" height="300">
+                    <div style={{ fontSize: '16px', color: '#555', textAlign: 'center', lineHeight: '1.5' }}>
+                      This is to certify that the student has successfully completed the <strong>{certificateData.courseName}</strong> program at
+                      <strong> {certificateData.collegeName}</strong>, bearing  College ID <strong>{certificateData.collegeId}</strong>. The program was conducted
+                      with the highest standards of academic excellence, equipping the student with essential skills and knowledge in the respective
+                      field of study.
+                      <br /><br />
+                      The certificate is being issued on <strong>{certificateData.issueDate}</strong>, as a recognition of the student’s dedication, hard
+                      work, and successful achievement in fulfilling all the requirements of the program.
+                    </div>
+                  </foreignObject>
 
-                {/* Signature line */}
-                <text x="400" y="450" textAnchor="middle" fill="#9333EA" fontSize="14">
-                  Obtained score is {certificateData.studentPercentage}%
-                </text>
-                <line x1="200" y1="470" x2="600" y2="470" stroke="#4a90e2" strokeWidth="2" strokeDasharray="5,5" />
+                  {/* Signature line */}
+                  <text x="400" y="450" textAnchor="middle" fill="#9333EA" fontSize="14">
+                    Obtained score is {certificateData.studentPercentage}%
+                  </text>
+                  <line x1="200" y1="470" x2="600" y2="470" stroke="#4a90e2" strokeWidth="2" strokeDasharray="5,5" />
 
-                {/* Footer text */}
-                <text x="400" y="500" textAnchor="middle" fill="#9333EA" fontSize="14">
-                  {(certificateId) ? `Authenticated Certificate ID is ${certificateId}` : 'Certificate ID not issued'}
-                </text>
-                <text x="400" y="530" textAnchor="middle" fill="#333" fontSize="14">
-                  This certificate is digitally verified and authenticated.
-                </text>
-              </svg>
+                  {/* Footer text */}
+                  <text x="400" y="500" textAnchor="middle" fill="#9333EA" fontSize="14">
+                    {(certificateId) ? `Authenticated Certificate ID is ${certificateId}` : 'Certificate ID not issued'}
+                  </text>
+                  <text x="400" y="530" textAnchor="middle" fill="#333" fontSize="14">
+                    This certificate is digitally verified and authenticated.
+                  </text>
+                </svg>
+              </div>
+              {
+                certificateId ? (<Button onClick={generatePDF} className="mt-4">
+                  Download PDF
+                </Button>) : null
+              }
             </Flex>
           )
         }
