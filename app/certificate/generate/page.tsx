@@ -177,7 +177,7 @@ const GenerateCertificate = () => {
         format: [canvas.width, canvas.height],
       });
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save('certificate.pdf');
+      pdf.save(`${certificateData?.studentName}_${certificateId}.pdf`);
     }
   };
 
